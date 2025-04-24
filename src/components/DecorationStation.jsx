@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import "./DecorationStation.css";
 import { getItems } from "../services/itemServices.js";
 import { getSeasons } from "../services/seasonServices.js";
+import { DecorationForm } from "./forms/DecorationForm.jsx";
+import { ItemFilterBar } from "./item/ItemFilterBar.jsx";
+import { ItemList } from "./item/ItemList.jsx";
 
 function DecorationStation() {
   const [items, setItems] = useState([]);
   const [seasons, setSeasons] = useState([]);
   const [seasonChoice, setSeasonChoice] = useState(0);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [userChoices, setUserChoices] = useState({
+    name: "",
+    imageUrl: "",
+    seasonId: 0,
+    categoryId: 0,
+  });
 
   useEffect(() => {
     getItems().then((items) => {
@@ -36,37 +45,18 @@ function DecorationStation() {
 
   return (
     <>
-      <div id="filter-bar">
-        <select
-          className="filter-box"
-          id="season-select"
-          value={seasonChoice}
-          onChange={(event) => {
-            setSeasonChoice(parseInt(event.target.value));
-          }}
-        >
-          <option key="0" value="0">
-            All seasons
-          </option>
-          {seasons.map((season) => {
-            return (
-              <option key={season.id} value={season.id}>
-                {season.name}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-      <div className="item-container">
-        {filteredItems.map((item) => {
-          return (
-            <div key={item.id} className="item-card">
-              <img src={item.imageUrl} alt="" className="item-img"></img>
-              <div className="item-name">{item.name}</div>
-            </div>
-          );
-        })}
-      </div>
+      <ItemFilterBar
+        seasonChoice={seasonChoice}
+        setSeasonChoice={setSeasonChoice}
+        seasons={seasons}
+      />
+      <DecorationForm
+        seasons={seasons}
+        setUserChoices={setUserChoices}
+        userChoices={userChoices}
+        setItems={setItems}
+      />
+      <ItemList filteredItems={filteredItems} />
     </>
   );
 }
