@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../../services/categoryServices.js";
-import { createItem } from "../../services/itemServices.js";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSeasons } from "../../services/seasonServices.js";
-import { useNavigate } from "react-router-dom";
+import { getCategories } from "../../services/categoryServices.js";
+import {
+  deleteItem,
+  getItem,
+  updateItem,
+} from "../../services/itemServices.js";
 
-export const DecorationForm = () => {
+export const DecorationFormEdit = () => {
   const [categories, setCategories] = useState([]);
   const [seasons, setSeasons] = useState([]);
   const [userChoices, setUserChoices] = useState({
@@ -14,9 +18,19 @@ export const DecorationForm = () => {
     categoryId: 0,
   });
 
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    getItem(id).then((item) => {
+      setUserChoices({
+        id: item.id,
+        name: item.name,
+        imageUrl: item.imageUrl,
+        seasonId: item.seasonId,
+        categoryId: item.categoryId,
+      });
+    });
     getSeasons().then(setSeasons);
     getCategories().then(setCategories);
   }, []);
@@ -37,18 +51,18 @@ export const DecorationForm = () => {
       userChoices.seasonId &&
       userChoices.categoryId
     ) {
-      createItem(userChoices).then(() => {
-        setUserChoices({
-          name: "",
-          imageUrl: "",
-          seasonId: 0,
-          categoryId: 0,
-        });
-        navigate("/");
+      updateItem(userChoices).then(() => {
+        navigate(-1);
       });
     } else {
       alert("You missed a field. Lamont you big dummy!");
     }
+  };
+
+  const handleDelete = () => {
+    deleteItem(userChoices.id).then(() => {
+      navigate("/items");
+    });
   };
 
   return (
@@ -129,7 +143,10 @@ export const DecorationForm = () => {
         </div>
       </fieldset>
       <button className="btn" onClick={handleSaveDecoration}>
-        Add Decoration
+        Edit Decoration
+      </button>
+      <button className="btn" onClick={handleDelete}>
+        Delete Decoration
       </button>
     </form>
   );
