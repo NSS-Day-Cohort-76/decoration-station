@@ -52,14 +52,15 @@ export const DecorationFormEdit = () => {
       userChoices.categoryId
     ) {
       updateItem(userChoices).then(() => {
-        navigate(-1);
+        navigate(`/items/${userChoices.id}`);
       });
     } else {
       alert("You missed a field. Lamont you big dummy!");
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.preventDefault();
     deleteItem(userChoices.id).then(() => {
       navigate("/items");
     });

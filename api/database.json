@@ -132,6 +132,13 @@
       "imageUrl": "https://images.kirklands.com/is/image/Kirklands/277008?hei=300&qlt=85,1&wid=300&fmt=jpeg&resMode=bicub&op_sharpen=1",
       "seasonId": 2,
       "categoryId": 1
+    },
+    {
+      "name": "Turkey Votive Holders",
+      "imageUrl": "https://m.media-amazon.com/images/I/91+5w4nI-EL.AC_UL320.jpg",
+      "seasonId": 3,
+      "categoryId": 5,
+      "id": 20
     }
   ],
   "seasons": [
